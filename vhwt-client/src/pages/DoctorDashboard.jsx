@@ -23,7 +23,7 @@ export default function DoctorDashboard() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/doctor/workers", {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/doctor/workers`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setWorkers(res.data))

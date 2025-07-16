@@ -11,7 +11,7 @@ export default function PatientDetails() {
 
   const fetchPatient = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/patients/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log("Fetched patient data:", res.data); // ✅ debug line
@@ -35,7 +35,7 @@ export default function PatientDetails() {
 
       try {
         await axios.post(
-          `http://localhost:5000/api/patients/${id}/log`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/patients/${id}/log`,
           { ...form, geolocation: { lat, long } },
           { headers: { Authorization: `Bearer ${token}`} }
         );

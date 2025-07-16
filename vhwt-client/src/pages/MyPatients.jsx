@@ -11,7 +11,7 @@ export default function MyPatients() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/patients/my", {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/my`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setPatients(res.data))
@@ -20,7 +20,7 @@ export default function MyPatients() {
 
   const fetchPatientDetails = async (id) => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/patients/${id}`, {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSelectedPatient({
@@ -41,7 +41,7 @@ export default function MyPatients() {
       navigator.geolocation.getCurrentPosition(async (pos) => {
         const { latitude: lat, longitude: long } = pos.coords;
         await axios.post(
-          `http://localhost:5000/api/patients/${selectedPatient._id}/log`,
+          `${process.env.REACT_APP_BACKEND_URL}/api/patients/${selectedPatient._id}/log`,
           { visitType, details, geolocation: { lat, long } },
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -91,12 +91,12 @@ export default function MyPatients() {
 
     try {
       await axios.put(
-        `http://localhost:5000/api/patients/${patient._id}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/patients/${patient._id}`,
         { name: newName, age: newAge, village: newVillage, type: newType },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Patient updated successfully.");
-      const res = await axios.get("http://localhost:5000/api/patients/my", {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/my`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setPatients(res.data);
@@ -111,7 +111,7 @@ export default function MyPatients() {
   const handleDelete = async (patientId) => {
     if (!window.confirm("Are you sure you want to delete this patient?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/patients/${patientId}`, {
+      await axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/patients/${patientId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       alert("Patient deleted successfully.");

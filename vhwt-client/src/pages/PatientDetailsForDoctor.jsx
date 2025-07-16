@@ -10,7 +10,7 @@ export default function PatientDetailsForDoctor({ patientId }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/api/patients/${patientId}`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/${patientId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
@@ -22,7 +22,7 @@ export default function PatientDetailsForDoctor({ patientId }) {
   const updateNote = () => {
     axios
       .put(
-        `http://localhost:5000/api/doctor/note/${patientId}`,
+        `${process.env.REACT_APP_BACKEND_URL}/api/doctor/note/${patientId}`,
         { note },
         { headers: { Authorization: `Bearer ${token}` } }
       )

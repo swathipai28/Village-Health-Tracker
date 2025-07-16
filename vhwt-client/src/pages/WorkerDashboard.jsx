@@ -21,7 +21,7 @@ export default function WorkerDashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/patients/dashboard/stats", {
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/patients/dashboard/stats`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStats(res.data);
