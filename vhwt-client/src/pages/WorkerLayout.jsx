@@ -61,13 +61,13 @@
 //   );
 // }
 // components/WorkerLayout.jsx
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle, ClipboardList, LogOut, CalendarCheck } from "lucide-react";
+import { PlusCircle, ClipboardList, LogOut, CalendarCheck, Menu } from "lucide-react";
 
-// WorkerLayout.jsx
 export default function WorkerLayout({ children, setSelectedTab }) {
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -75,47 +75,70 @@ export default function WorkerLayout({ children, setSelectedTab }) {
     navigate("/login");
   };
 
+  const handleTabClick = (tab) => {
+    setSelectedTab(tab);
+    setMobileMenuOpen(false); // Close mobile menu when a tab is selected
+  };
+
   return (
-    <div className="flex min-h-screen bg-gradient-to-tr from-blue-50 to-indigo-100">
-      <aside className="w-64 bg-white shadow-md p-6 flex flex-col justify-between">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-tr from-blue-50 to-indigo-100">
+      {/* Mobile Header */}
+      <div className="md:hidden flex items-center justify-between p-4 bg-white shadow-sm">
+        <h2 className="text-xl font-bold text-indigo-700">👩‍⚕ ASHA Worker</h2>
+        <button 
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-2 rounded-md text-gray-700 hover:bg-gray-100"
+        >
+          <Menu size={24} />
+        </button>
+      </div>
+
+      {/* Sidebar - Hidden on mobile by default */}
+      <aside className={`${mobileMenuOpen ? 'block' : 'hidden'} md:block w-full md:w-64 bg-white shadow-md p-6 flex flex-col fixed md:static h-full z-10`}>
         <div>
-          <h2 className="text-xl font-bold text-indigo-700 mb-6">👩‍⚕ ASHA Worker</h2>
+          {/* Hidden on mobile since we show it in the header */}
+          <h2 className="hidden md:block text-xl font-bold text-indigo-700 mb-6">👩‍⚕ ASHA Worker</h2>
+          
           <nav className="space-y-4">
-             <button
-              onClick={() => setSelectedTab("dashboard")}
-              className="flex items-center gap-3 text-gray-700 hover:text-indigo-600"
+            <button
+              onClick={() => handleTabClick("dashboard")}
+              className="flex items-center gap-3 w-full text-left p-3 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
             >
               <CalendarCheck size={20} />
-              Home
+              <span>Home</span>
             </button>
+            
             <button
-              onClick={() => setSelectedTab("add")}
-              className="flex items-center gap-3 text-gray-700 hover:text-indigo-600"
+              onClick={() => handleTabClick("add")}
+              className="flex items-center gap-3 w-full text-left p-3 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
             >
               <PlusCircle size={20} />
-              Add Patient
+              <span>Add Patient</span>
             </button>
+            
             <button
-              onClick={() => setSelectedTab("mypatients")}
-              className="flex items-center gap-3 text-gray-700 hover:text-indigo-600"
+              onClick={() => handleTabClick("mypatients")}
+              className="flex items-center gap-3 w-full text-left p-3 rounded-lg text-gray-700 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
             >
               <ClipboardList size={20} />
-              My Patients
+              <span>My Patients</span>
             </button>
-           
           </nav>
         </div>
 
         <button
           onClick={handleLogout}
-          className="flex items-center gap-3 text-red-600 hover:text-red-800 mt-10"
+          className="flex items-center gap-3 w-full text-left p-3 rounded-lg mt-10 text-red-600 hover:text-red-800 hover:bg-red-50 transition-colors"
         >
           <LogOut size={20} />
-          Logout
+          <span>Logout</span>
         </button>
       </aside>
 
-      <main className="flex-1 p-8 overflow-y-auto">{children}</main>
+      {/* Main Content - Adjusted for mobile header */}
+      <main className="flex-1 p-4 md:p-8 overflow-y-auto mt-16 md:mt-0">
+        {children}
+      </main>
     </div>
   );
 }
